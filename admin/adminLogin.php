@@ -1,12 +1,31 @@
 <?php
+require_once"dbconnect.php";
+
 if (isset($_POST['login'])) //$POST is super global array
 {
 $email = $_POST['email']; //retrieve email value of user
 $password = $_POST['password']; //retrieve password user
 //echo "email is $email and password you typed is $password";
+$sql = "select * from admin where email=?";
+$stmt=$conn->prepare($sql); 
+$stmt->execute([$email]);
 
+$adminInfo=$stmt->fetch(); //single row returns
+//$adminInfo['ID'], $adminInfo['email'],$adminInfo['password'],$adminInfo['remark']
+if ($adminInfo)
+{
+if (password_verify($password, $adminInfo["password"]))
+{
+    echo "login success!";
+}
+else{ //password and hash doesn't match.
 
-
+    $errorMessage = "Email of password might be in correct!!!!";
+}
+} //if end
+else{// admin's filled email does not exist.
+    $errorMessage = "Email of password might be in correct!!!!";
+}
 }
 
 
@@ -36,6 +55,13 @@ $password = $_POST['password']; //retrieve password user
         <div class="row">
             <div class="col-md-6 mx-auto py-5">
         <form action="adminlogin.php" method="post">
+
+            <?php 
+            if (isset($errorMessage)) {
+                echo "<p class='alert alert-danger'> $errorMessage </p>";
+            }
+            ?>
+
             <div class="mb-3">
                 <label for="" class="form-label">Email</label>
                     <input type="email" class="form-control" name="email">
@@ -45,7 +71,7 @@ $password = $_POST['password']; //retrieve password user
                 <label for="">Password</label>
                 <input type="password" class="form-control" name="password">
             </div>
-            <button type="Submit"class="btn btn-outline-primary"name="login">Login
+            <button type="Submit"class="btn btn-outline-primary" name="login">Login
 
             </button>
         </form>
