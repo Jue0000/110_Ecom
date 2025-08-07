@@ -1,5 +1,10 @@
 <?php
  require_once "dbconnect.php";
+
+ if(!isset($_SESSION))
+ {//session will be opened when it does not exist.
+    session_start();
+ }
  try{
     $sql="select * from category";
   $stmt=$conn->prepare($sql);
@@ -32,8 +37,23 @@ $filePath="productImage/".$fileImage['name'];
 $status=move_uploaded_file($fileImage['tmp_name'],$filePath);
 
 if($status){
-echo "File uploaded";
-echo "<img src=$filePath>";
+try {// inserting data into database
+    //	productID	productName	category	price	description	qty	imgPath	
+
+ $sql ="Insert into product values (?,?,?,?,?,?,?)";
+ $stmt=$conn->prepare($sql);
+ $flag=$stmt->execute([null,$name, $category, $price, $description, $qty, $filePath]);
+ $id=$conn->lastInsertId();
+ if ($flag)
+ {
+    $message="new product with id $id has been inserted succeccfully!";
+    $_SESSION["message"] = $message;
+    header("Location:viewProduct.php");
+ }
+
+} catch(PDOException $e) {
+    echo $e->getMessage();
+}
 } else
 {
     echo "file upload fail";
