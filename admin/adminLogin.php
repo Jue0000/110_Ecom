@@ -54,7 +54,7 @@ else{// admin's filled email does not exist.
         </div>
         <div class="row">
             <div class="col-md-6 mx-auto py-5">
-        <form action="adminlogin.php" method="post">
+        <form action="<?php echo $_SERVER['PHP_SELF'] ?>" method="post">
 
             <?php 
             if (isset($errorMessage)) {
