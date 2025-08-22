@@ -117,7 +117,7 @@ else if(isset($_POST['radioBtn'])){//radio search
         <div class="row"><!-- content    -->
             <div class="col-md-2 py-5">
                 <div class="card">
-                <a href="insertprouct.php" class="btn btn-outline-primary card-link">New Product</a>
+                <a href="insertProduct.php" class="btn btn-outline-primary card-link">New Product</a>
             </div>
             <div class="card">
                 <div class="card-title">Category Search</div>
